@@ -1,4 +1,4 @@
-load('proj_fit_23.mat'); % Importam datele
+load data.mat % Importam datele
 
 % Termeni utilizati:
 %     * RBF = Functii Radiale de Baza ;
@@ -18,7 +18,7 @@ b1=0.5; b2=0.5;
 % a-l obtine pe cel mai precis
 for R=6:30
     % Functie de calcul PHI:
-    phi=aflaPHI(id.X,R,b1,b2);
+    phi=findPHI(id.X,R,b1,b2);
     % Aflam vectorul TETA:   
     teta=phi\id.Y(:);
     % Folosim formula Y=PHI*TETA pentru Y aproximat (Yap) si il
@@ -28,7 +28,7 @@ for R=6:30
     e=id.Y-Yap;          MSE=mean(mean(e.^2));
     % Calculam un nou PHI pentru datele de validare si folosim acelasi TETA 
     % pentru obtinerea matricei Y aproximat de validare (Yap2) si MSE2:
-    phi2=aflaPHI(val.X,R,b1,b2);
+    phi2=findPHI(val.X,R,b1,b2);
     Yap2=vec2mat((phi2*teta),val.dims(1))';
     e=val.Y-Yap2;        MSE2=mean(mean(e.^2));
     % Salvam datele in vectorii de retinere:
@@ -54,11 +54,11 @@ MSEv=[];MSE2v=[]; idx=0;
 for b1=0.1:0.1:0.9
 for b2=0.1:0.1:0.9
     % Recalculam datele pentru R ideal:
-    phi=aflaPHI(id.X,R,b1,b2);
+    phi=findPHI(id.X,R,b1,b2);
     teta=phi\id.Y(:);   
     Yap=vec2mat((phi*teta),id.dims(1))';
     e=id.Y-Yap;         MSE=mean(mean(e.^2));
-    phi2=aflaPHI(val.X,R,b1,b2);
+    phi2=findPHI(val.X,R,b1,b2);
     Yap2=vec2mat((phi2*teta),val.dims(1))';
     e=val.Y-Yap2;       MSE2=mean(mean(e.^2));
     % Salvam datele calculate:
